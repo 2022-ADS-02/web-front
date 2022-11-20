@@ -54,11 +54,12 @@ form button {
 }
 
 .scoring {
-    width: 100%;
-    background: linear-gradient(96.07deg, #84E9FF 0%, #C284FF 100%);
+    /*width: 100%;*/
     border-radius: 0 0 5px 5px;
     border: 1px solid #ccc;
     border-top-width: 0;
+    flex-basis: 0;
+    flex-grow: 1;
 }
 
 
@@ -151,4 +152,35 @@ hr.dashed {
 
 .CodeMirror * {
     font-family: Hack;
+}
+
+.scoring:first-of-type {
+    /*border-width: 0;*/
+    border-right-width: 0;
+    border-radius: 0 0 0 5px;
+    background: linear-gradient(96.07deg, #84E9FF 0%, #a0bdfe 100%);
+    /*width: 50%*/
+}
+
+.scoring:last-of-type {
+    /*border-width: 0;*/
+    border-left-width: 0;
+    border-radius: 0 0 5px 0;
+    background: linear-gradient(96.07deg, #a0bdfe 0%, #C284FF 100%);
+    /*width: 50%*/
+}
+
+.scoring:first-of-type:hover {
+    color: #2a2d3e;
+    background: linear-gradient(96.07deg, rgba(132, 233, 255, 0.5) 0%, rgba(160, 189, 254, 0.5) 100%);
+}
+
+.scoring:last-of-type:hover {
+    color: #2a2d3e;
+    background: linear-gradient(96.07deg, rgba(160, 189, 254, 0.5) 0%, rgba(194, 132, 255, 0.5) 100%);
+}
+
+.submit-buttons{
+    display: flex;
+    /*box-shadow: 0 2px 6px rgb(0 0 0 / 20%);*/
 }

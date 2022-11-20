@@ -17,7 +17,11 @@
 <form id="code-form" action="/scoring" method="post" onsubmit="submit_code_before(this)">
     <textarea id="batch_content" name="batch_content"></textarea>
     <!--    <button type="submit" class="scoring" onclick="fn_msg()">채점</button>-->
-    <button type="button" class="scoring" onclick="submit_code(this)">채점</button>
+    <div class="submit-buttons">
+        <button type="button" class="scoring" onclick="score_code(this)">채점</button>
+        <button type="button" class="scoring" onclick="">제출</button>
+    </div>
+
 </form>
 
 
@@ -84,7 +88,7 @@
         event.action = '/scoring/' + document.getElementsByClassName("language-bar active").item(0).textContent;
     }
 
-    function submit_code(event) {
+    function score_code(event) {
         let text = editor.getValue();
         let myForm = document.getElementById("code-form")
         if (text)

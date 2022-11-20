@@ -28,6 +28,10 @@
   box-shadow: 0px 2px 6px rgb(0 0 0 / 20%);
 }
 
+.content ol, .content ul {
+  padding: 0 30px;
+}
+
 /* 형제 선택자 */
 .collapsible + .content{
     display: none;
