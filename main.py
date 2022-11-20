@@ -44,7 +44,7 @@ async def search_boj_problem(request: Request, task: str = Form(...)):
     global cur_problem
     cur_problem = task
     # async with AsyncClient(base_url="http://172.17.0.1:7000/search/") as ac:
-    async with AsyncClient(base_url="http://localhost:7000/search/") as ac:
+    async with AsyncClient(base_url="http://172.17.0.1:8080/search/") as ac:
         try:
             response = await ac.get(task)
             response_json = response.json()
