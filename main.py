@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from httpx import AsyncClient
 from fastapi.responses import FileResponse
+import traceback
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -40,13 +41,18 @@ async def home(request: Request):
 # 문제 번호 제출 시
 @app.post("/search")
 async def search_boj_problem(request: Request, task: str = Form(...)):
-    # 크롤링 서버로부터 받아옴
     global cur_problem
+    # 크롤링 서버로부터 받아옴
+    if task == "":
+        cur_problem = ''
+        problem_info.clear()
+        return
     cur_problem = task
     # async with AsyncClient(base_url="http://172.17.0.1:7000/search/") as ac:
     async with AsyncClient(base_url="http://172.17.0.1:8080/search/") as ac:
         try:
             response = await ac.get(task)
+            assert response.status_code == 200
             response_json = response.json()
             problem_info["problem_description"] = response_json["problem_description"]
             problem_info["problem_input"] = response_json["problem_input"]
@@ -54,7 +60,8 @@ async def search_boj_problem(request: Request, task: str = Form(...)):
             problem_info["samples"] = response_json["samples"]
             problem_info["samples_text"] = response_json["samples_text"]
         except Exception as e:
-            print(e)
+            print('ERROR', e)
+            traceback.print_exc()
         return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
 
@@ -65,8 +72,11 @@ async def send_request_to_scoring(request: Request, language: str, batch_content
     print(batch_content)
     if "samples_text" in problem_info:
         print(problem_info["samples_text"])
-    return {"language":language, "code": batch_content, "samples_text": problem_info["samples_text"]}
-    # return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
+    print({"language": language, "code": batch_content,
+            "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""})
+    # return {"language": language, "code": batch_content,
+    #         "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""}
+    return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
 
 if __name__ == '__main__':
