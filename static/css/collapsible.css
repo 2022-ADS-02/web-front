@@ -1,0 +1,36 @@
+.collapsible {
+  background-color: #a0c5ff;
+  color: white;
+  cursor: pointer;
+  /*padding: 18px;*/
+  padding: 0 0 0 0.25em;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  height: 1.7em;
+  border-radius: 5px 5px 0px 0px;
+  margin: 0.3em 0 0 0;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.collapsible:active, .collapsible:hover {
+  background-color: #b3cfff;
+}
+
+.content {
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.5em;
+  display: none;
+  overflow: hidden;
+  background-color: #fdfdfd;
+  box-shadow: 0px 2px 6px rgb(0 0 0 / 20%);
+}
+
+.search_set {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5em;
+}

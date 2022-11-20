@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="/search" method="post">
+    <div class="search_set">
+        <textarea name="task" rows="1" placeholder="백준 문제 번호를 입력해주세요">{{cur_problem}}</textarea>
+        <button type="submit" class="search">검색</button>
+    </div>
+</form>
+
+<div class="topnav">
+  <a class="language-bar active" onclick="change_language(this, 'text/x-python')">Python</a>
+  <a class="language-bar" onclick="change_language(this, 'text/x-java')">Java</a>
+</div>
+
+<form action="/scoring" method="post">
+    <textarea id="batch_content" name="batch_content"></textarea>
+<!--    <button type="submit" class="scoring" onclick="fn_msg()">채점</button>-->
+    <button type="submit" class="scoring">채점</button>
+</form>
+
+<br>
+<button type="button" class="collapsible">문제</button>
+<div class="content" id="problem_description">
+    {{problem_description | safe }}
+</div>
+<button type="button" class="collapsible">입력</button>
+<div class="content" id="problem_input">
+    {{problem_input | safe }}
+</div>
+
+<button type="button" class="collapsible">출력</button>
+<div class="content" id="problem_output">
+    {{problem_output | safe }}
+</div>
+<button type="button" class="collapsible">예제</button>
+<div class="content" id="samples">
+    {% for sample in samples %}
+    <h4> 예제 입력 {{ loop.index }} </h4>
+    {{ sample.input | safe }}
+    <h4> 예제 출력 {{ loop.index }}</h4>
+    {{ sample.output | safe }}
+    {% if not loop.last %}
+    <hr class="dashed">
+    {% endif %}
+    {% endfor %}
+</div>
+
+<script>
+    console.log('script')
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+
+    // textarea 태그의 element를 지정
+    let textarea = document.getElementById('batch_content');
+    // 에디터 설정
+    let editor = CodeMirror.fromTextArea(textarea, {
+        lineNumbers: true,  //왼쪽 라인넘버 표기
+        lineWrapping: true, //줄바꿈. 음.. break-word;
+        theme: "material-palenight",   //테마는 맘에드는 걸로.
+        mode: 'text/x-python', //모드는 sql 모드
+        val: textarea.value
+    });
+
+    function fn_msg() {
+        // 에디터에 입력된 값은 아래와 같이 가져올 수 있다.
+        let text = editor.getValue();
+        alert(text);
+    }
+
+    let languageBars = document.getElementsByClassName("language-bar");
+    function change_language(e, language_mode) {
+        console.log(language_mode)
+        console.log(languageBars)
+        Array.prototype.forEach.call(languageBars,(element) => {
+            element.classList.toggle("active");
+        })
+        // e.classList.toggle("active");
+        editor.setOption("mode", language_mode)
+    }
+    // let problem_description = document.getElementById("problem_description")
+    // problem_description.innerHTML = problem_description.innerText
+    // let problem_input = document.getElementById("problem_input")
+    // problem_input.innerHTML = problem_input.innerText
+    // let problem_output = document.getElementById("problem_output")
+    // problem_output.innerHTML = problem_output.innerText
+    // let samples = document.getElementById("samples")
+    // samples.innerHTML = samples.innerText
+</script>
+{% endblock content %}
