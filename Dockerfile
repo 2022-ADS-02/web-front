@@ -9,4 +9,6 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
+ENV TZ Asia/Seoul
+
 CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "main:app"]
