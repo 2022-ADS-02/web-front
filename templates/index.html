@@ -14,7 +14,7 @@
   <a class="language-bar" onclick="change_language(this, 'text/x-java')">Java</a>
 </div>
 
-<form action="/scoring" method="post">
+<form action="/scoring" method="post" onsubmit="submit_code(this)">
     <textarea id="batch_content" name="batch_content"></textarea>
 <!--    <button type="submit" class="scoring" onclick="fn_msg()">채점</button>-->
     <button type="submit" class="scoring">채점</button>
@@ -74,10 +74,9 @@
         val: textarea.value
     });
 
-    function fn_msg() {
-        // 에디터에 입력된 값은 아래와 같이 가져올 수 있다.
-        let text = editor.getValue();
-        alert(text);
+    function submit_code(event) {
+        // let text = editor.getValue();
+        event.action = '/scoring/'+document.getElementsByClassName("language-bar active").item(0).textContent;
     }
 
     let languageBars = document.getElementsByClassName("language-bar");
