@@ -1,4 +1,4 @@
-image_name='gorae-front'
+image_name='goldggyul/gorae-front'
 container_name='gorae-front-container'
 port=8000
 

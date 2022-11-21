@@ -15,6 +15,12 @@ problem_info = {}
 
 cur_problem = ''
 
+search_base_url = "http://172.17.0.1:8080/"
+# search_base_url = "http://localhost:7001/"
+# submit_base_url = "http://172.17.0.1:8080/"
+submit_base_url = "http://172.17.0.1:9000/"
+# submit_base_url = "http://localhost:9000/"
+
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
@@ -49,9 +55,9 @@ async def search_boj_problem(request: Request, task: str = Form(...)):
         return
     cur_problem = task
     # async with AsyncClient(base_url="http://172.17.0.1:7000/search/") as ac:
-    async with AsyncClient(base_url="http://172.17.0.1:8080/search/") as ac:
+    async with AsyncClient(base_url=search_base_url) as ac:
         try:
-            response = await ac.get(task)
+            response = await ac.get(url="search/" + task)
             assert response.status_code == 200
             response_json = response.json()
             problem_info["problem_description"] = response_json["problem_description"]
@@ -67,15 +73,23 @@ async def search_boj_problem(request: Request, task: str = Form(...)):
 
 @app.post("/scoring/{language}")
 async def send_request_to_scoring(request: Request, language: str, batch_content: str = Form(...)):
-    print(language)
-    # 크롤링 서버로부터 받아옴
-    print(batch_content)
-    if "samples_text" in problem_info:
-        print(problem_info["samples_text"])
-    print({"language": language, "code": batch_content,
-            "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""})
-    # return {"language": language, "code": batch_content,
-    #         "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""}
+    if language != "Python" and language != "Java":
+        print(language, "NOT SUPPORTED")
+        return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
+    post_request = {"language": language, "code": batch_content,
+                    "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""}
+    print(post_request)
+    async with AsyncClient(base_url=submit_base_url) as ac:
+        try:
+            response = await ac.post(url="judge", json=post_request)
+            assert response.status_code == 200
+            if response.json():
+               print("맞았습니다!")
+            else:
+               print("틀렸습니다..")
+        except Exception as e:
+            print('ERROR', e)
+            traceback.print_exc()
     return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
 
