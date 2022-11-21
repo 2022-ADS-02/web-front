@@ -180,7 +180,25 @@ hr.dashed {
     background: linear-gradient(96.07deg, rgba(160, 189, 254, 0.5) 0%, rgba(194, 132, 255, 0.5) 100%);
 }
 
-.submit-buttons{
+.submit-buttons {
     display: flex;
     /*box-shadow: 0 2px 6px rgb(0 0 0 / 20%);*/
+}
+
+.result {
+    margin: 1em 0;
+}
+
+.code-result {
+    padding: 0.3em 9px;
+    overflow: hidden;
+    background-color: #fdfdfd;
+    box-shadow: 0px 2px 6px rgb(0 0 0 / 20%);
+    display: flex;
+    align-items: center;
+    /*justify-content: space-between;*/
+}
+
+.code-result svg{
+    margin: 0 0.5em 0 0;
 }

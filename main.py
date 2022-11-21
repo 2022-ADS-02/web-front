@@ -17,9 +17,12 @@ cur_problem = ''
 
 search_base_url = "http://172.17.0.1:8080/"
 # search_base_url = "http://localhost:7001/"
-# submit_base_url = "http://172.17.0.1:8080/"
-submit_base_url = "http://172.17.0.1:9000/"
-# submit_base_url = "http://localhost:9000/"
+judge_base_url = "http://172.17.0.1:8080/"
+# judge_base_url = "http://172.17.0.1:9000/"
+# judge_base_url = "http://localhost:9000/"
+
+test_passed = False
+submit_passed = False
 
 
 @app.get('/favicon.ico', include_in_schema=False)
@@ -41,6 +44,8 @@ async def home(request: Request):
                                                          "samples"] if "samples" in problem_info else "",
                                                      "samples_text": problem_info[
                                                          "samples_text"] if "samples_text" in problem_info else "",
+                                                     "test_passed": test_passed,
+                                                     "submit_passed": submit_passed,
                                                      })
 
 
@@ -65,6 +70,9 @@ async def search_boj_problem(request: Request, task: str = Form(...)):
             problem_info["problem_output"] = response_json["problem_output"]
             problem_info["samples"] = response_json["samples"]
             problem_info["samples_text"] = response_json["samples_text"]
+            global test_passed, submit_passed
+            test_passed = False
+            submit_passed = False
         except Exception as e:
             print('ERROR', e)
             traceback.print_exc()
@@ -79,16 +87,22 @@ async def send_request_to_scoring(request: Request, language: str, batch_content
     post_request = {"language": language, "code": batch_content,
                     "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""}
     print(post_request)
-    async with AsyncClient(base_url=submit_base_url) as ac:
+    async with AsyncClient(base_url=judge_base_url) as ac:
         try:
             response = await ac.post(url="judge", json=post_request)
+
+            if response.status_code != 200:
+                print('Response not OK:', response.status_code)
+
             assert response.status_code == 200
+            global test_passed, submit_passed
             if response.json():
                print("맞았습니다!")
+               test_passed = True
             else:
                print("틀렸습니다..")
+               test_passed = False
         except Exception as e:
-            print('ERROR', e)
             traceback.print_exc()
     return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 

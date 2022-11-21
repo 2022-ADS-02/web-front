@@ -21,11 +21,61 @@
         <button type="button" class="scoring" onclick="score_code(this)">채점</button>
         <button type="button" class="scoring" onclick="">제출</button>
     </div>
-
 </form>
 
+<!-- 테스트 통과 -->
+<div class="result">
+    <div class="code-result">
+        {% if test_passed %}
+        <svg style="fill: #57ab5a" width="16" height="16" style="margin-top: 2px"
+             class="octicon octicon-check-circle-fill color-fg-success" aria-label="completed successfully"
+             viewBox="0 0 16 16" version="1.1" role="img">
+            <path fill-rule="evenodd"
+                  d="M8 16A8 8 0 108 0a8 8 0 000 16zm3.78-9.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z"></path>
+        </svg>
+        <p> TESTS PASSED </p>
+        <!--        <svg  style="fill: #57ab5a" class="octicon octicon-check mx-auto d-block color-fg-success" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg>-->
 
-<br>
+        {% else %}
+        <svg style="fill: #e5534b" width="16" height="16" style="margin-top: 2px"
+             class="octicon octicon-x-circle-fill color-fg-danger" aria-label="failed" viewBox="0 0 16 16" version="1.1"
+             role="img">
+            <path fill-rule="evenodd"
+                  d="M2.343 13.657A8 8 0 1113.657 2.343 8 8 0 012.343 13.657zM6.03 4.97a.75.75 0 00-1.06 1.06L6.94 8 4.97 9.97a.75.75 0 101.06 1.06L8 9.06l1.97 1.97a.75.75 0 101.06-1.06L9.06 8l1.97-1.97a.75.75 0 10-1.06-1.06L8 6.94 6.03 4.97z"></path>
+        </svg>
+        <p> TESTS NOT PASSED </p>
+
+        <!--          <svg style="fill: #e5534b" class="octicon octicon-x mx-auto d-block color-fg-danger" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">-->
+        <!--            <path  fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z">-->
+        <!--            </path>-->
+        <!--          </svg>-->
+        {% endif %}
+    </div>
+    <div class="code-result">
+        {% if submit_passed %}
+        <svg style="fill: #57ab5a" width="16" height="16" style="margin-top: 2px"
+             class="octicon octicon-check-circle-fill color-fg-success" aria-label="completed successfully"
+             viewBox="0 0 16 16" version="1.1" role="img">
+            <path fill-rule="evenodd"
+                  d="M8 16A8 8 0 108 0a8 8 0 000 16zm3.78-9.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z"></path>
+        </svg>
+
+        <p> FINAL TESTS PASSED </p>
+
+        {% else %}
+        <svg style="fill: #e5534b" width="16" height="16" style="margin-top: 2px"
+             class="octicon octicon-x-circle-fill color-fg-danger" aria-label="failed" viewBox="0 0 16 16" version="1.1"
+             role="img">
+            <path fill-rule="evenodd"
+                  d="M2.343 13.657A8 8 0 1113.657 2.343 8 8 0 012.343 13.657zM6.03 4.97a.75.75 0 00-1.06 1.06L6.94 8 4.97 9.97a.75.75 0 101.06 1.06L8 9.06l1.97 1.97a.75.75 0 101.06-1.06L9.06 8l1.97-1.97a.75.75 0 10-1.06-1.06L8 6.94 6.03 4.97z"></path>
+        </svg>
+        <p> FINAL TESTS NOT PASSED </p>
+
+        {% endif %}
+    </div>
+</div>
+
+<!--<br>-->
 <button type="button" class="collapsible active">문제</button>
 <div class="content" id="problem_description">
     {% if problem_description != "" %}
