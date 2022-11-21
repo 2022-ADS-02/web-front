@@ -6,6 +6,7 @@ on:
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/web-front # 예를 들면, ghcr.io/dolphago/github-follow-unfollow
   VERSION: ${{ github.sha }}
+  CONTAINER_NAME: gorae-front
 
 jobs:
   build:
@@ -51,5 +52,5 @@ jobs:
           password: ${{ secrets.GHCR }}
       - name: Docker run
         run: |
-          docker ps -q --filter "name={your image name}" | grep -q . && docker stop {your image name} && docker rm -fv {your image name}
-          docker run -d -p 8080:8080 --name cicd --restart always ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+          docker stop ${{ env.NAME }} && docker rm ${{ env.CONTAINER_NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}
+          docker run -d -p 8000:8000 --name ${{ env.CONTAINER_NAME }} --restart always ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
