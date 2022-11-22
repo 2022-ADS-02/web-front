@@ -11,19 +11,18 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-problem_info = {}
-
-cur_problem = ''
-
 search_base_url = "http://172.17.0.1:8080/"
 # search_base_url = "http://localhost:7001/"
 judge_base_url = "http://172.17.0.1:8080/"
 # judge_base_url = "http://172.17.0.1:9000/"
 # judge_base_url = "http://localhost:9000/"
 
+problem_info = {}
+cur_problem = ''
 test_passed = False
 submit_passed = False
-
+cur_code = ''
+cur_language = 'Python'
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
@@ -34,6 +33,8 @@ async def favicon():
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request,
                                                      "cur_problem": cur_problem,
+                                                     "cur_code": cur_code,
+                                                     "cur_language": cur_language,
                                                      "problem_description": problem_info[
                                                          "problem_description"] if "problem_description" in problem_info else "",
                                                      "problem_input": problem_info[
@@ -74,7 +75,6 @@ async def search_boj_problem(request: Request, task: str = Form(...)):
             test_passed = False
             submit_passed = False
         except Exception as e:
-            print('ERROR', e)
             traceback.print_exc()
         return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
@@ -84,6 +84,9 @@ async def send_request_to_scoring(request: Request, language: str, batch_content
     if language != "Python" and language != "Java":
         print(language, "NOT SUPPORTED")
         return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
+    global cur_code, cur_language
+    cur_code = batch_content
+    cur_language = language
     post_request = {"language": language, "code": batch_content,
                     "samples_text": problem_info["samples_text"] if "samples_text" in problem_info else ""}
     print(post_request)
@@ -106,6 +109,17 @@ async def send_request_to_scoring(request: Request, language: str, batch_content
             traceback.print_exc()
     return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
+
+@app.get("/init")
+async def init_all_variables():
+    global problem_info, cur_problem, cur_code, cur_language, test_passed, submit_passed
+    problem_info = {}
+    cur_problem = ''
+    cur_code = ''
+    cur_language = 'Python'
+    test_passed = False
+    submit_passed = False
+    return RedirectResponse(url=app.url_path_for("home"), status_code=status.HTTP_303_SEE_OTHER)
 
 if __name__ == '__main__':
     # get_problem_info(1000)

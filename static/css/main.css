@@ -148,6 +148,12 @@ hr.dashed {
 
 .CodeMirror {
     padding: 0.5em;
+    height: auto;
+}
+
+.CodeMirror-scroll {
+    min-height: 250px;
+    max-height: 550px;
 }
 
 .CodeMirror * {
